@@ -10,6 +10,7 @@ include("libcurl")
 
 # Dependencies built as part of the build process
 include("mimalloc")
+include("iodlr")
 include("liburing")
 include("libcyaml")
 include("sentry")
