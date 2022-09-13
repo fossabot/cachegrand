@@ -29,6 +29,7 @@
 #include "clock.h"
 #include "xalloc.h"
 #include "pidfile.h"
+#include "iodlr.h"
 #include "log/log.h"
 #include "log/sink/log_sink.h"
 #include "log/sink/log_sink_console.h"
@@ -448,6 +449,8 @@ bool program_use_huge_pages(
         LOG_W(TAG, "Fast fixed memory allocator disabled in config, performances will be degraded");
     }
 
+    program_context->use_huge_pages = use_huge_pages;
+
     if (use_huge_pages) {
         hugepage_cache_init();
         ffma_enable(use_huge_pages);
@@ -455,7 +458,13 @@ bool program_use_huge_pages(
         ffma_enable(false);
     }
 
-    program_context->use_huge_pages = use_huge_pages;
+    // If hugepages are available (explicit or transparent ones), try to move the code onto hugepages to reduce the itlb
+    // misses, forcing the usage of explicit huge pages if they are enabled in the config
+    if (iodlr_can_enable()) {
+        if (!iodlr_try_setup(use_huge_pages)) {
+            LOG_W(TAG, "Failed to enabled iodlr to reduce iTLB cache misses");
+        }
+    }
 
     return use_huge_pages;
 }
