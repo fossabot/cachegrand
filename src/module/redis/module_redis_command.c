@@ -27,7 +27,7 @@
 #include "transaction_spinlock.h"
 #include "clock.h"
 #include "config.h"
-#include "data_structures/small_circular_queue/small_circular_queue.h"
+#include "data_structures/ring_bounded_spsc/ring_bounded_spsc.h"
 #include "data_structures/double_linked_list/double_linked_list.h"
 #include "data_structures/hashtable/mcmp/hashtable.h"
 #include "data_structures/hashtable/spsc/hashtable_spsc.h"
@@ -720,14 +720,20 @@ bool module_redis_command_process_argument_end(
         if (command_parser_context->positional_arguments_parsed_count <
             connection_context->command.info->arguments_count) {
             command_parser_context->positional_arguments_parsed_count++;
-            expected_argument = &connection_context->command.info->arguments[
-                    command_parser_context->positional_arguments_parsed_count];
 
-            // If the argument after the current is not positional (has a token) or it's of type ONEOF they have all
-            // been processed and there are only tokens to process so set the expected argument to null
-            if (!expected_argument->is_positional ||
-                expected_argument->type == MODULE_REDIS_COMMAND_ARGUMENT_TYPE_ONEOF) {
+            if (unlikely(command_parser_context->positional_arguments_parsed_count >=
+                connection_context->command.info->arguments_count)) {
                 expected_argument = NULL;
+            } else {
+                expected_argument = &connection_context->command.info->arguments[
+                        command_parser_context->positional_arguments_parsed_count];
+
+                // If the argument after the current is not positional (has a token) or it's of type ONEOF they have all
+                // been processed and there are only tokens to process so set the expected argument to null
+                if (!expected_argument->is_positional ||
+                    expected_argument->type == MODULE_REDIS_COMMAND_ARGUMENT_TYPE_ONEOF) {
+                    expected_argument = NULL;
+                }
             }
         }
     }

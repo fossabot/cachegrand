@@ -3,6 +3,7 @@
 [![LGTM Grade](https://img.shields.io/lgtm/grade/cpp/github/danielealbano/cachegrand?label=lgtm%20code%20quality)](https://lgtm.com/projects/g/danielealbano/cachegrand/context:cpp)
 ![Lines of code](https://sloc.xyz/github/danielealbano/cachegrand)
 [![COCOMO](https://sloc.xyz/github/danielealbano/cachegrand?category=cocomo)](https://en.wikipedia.org/wiki/COCOMO)
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/danielealbano)
 
 <p align="center">
   <a href="https://cachegrand.io">
@@ -13,30 +14,18 @@
   </a>
 </p>
 
-### Faster without spending one extra cent!
-
-Why pay more for less? cachegrand can help to squeeze all the value of your existing infrastructure is already offering!
-
-But not only we are working hard to expand compatibility with the most known caching platforms, cachegrand also comes
-with a tiered storage, although currently is work in progress, which will let you leverage hot, warm and cold disks
-to cache more data than the available memory!
-
-cachegrand needs your support and help, it's Open Source, no funky licenses as it's under a BSD 3-clause license, so you
-can use it as standalone platform or incorporate it into your platform(s), and it's being built because we love to do
-not let resources go under-utilized!
-
 ### What is cachegrand?
 
 cachegrand is an open-source fast, scalable and modular Key-Value store designed from the ground up to take advantage of
-modern hardware, able to provide better performance when compared to similar projects but also capable to provide a
-great flexibility in terms of management and developer experience.
+today's hardware, compatible with the well known Redis, able to provide better performance than many other platforms.
 
-The benchmarks below have been carried out on an AMD EPYC 7502P with 2 x 25Gbit network links using Ubuntu 22.04, with
-the default configuration (no network optimizations) and using memtier_benchmark with 10M different keys, 64 bytes of
+The benchmarks below have been carried out on an **AMD EPYC 7502P** with **2 x 25Gbit** network links using
+**Ubuntu 22.04**, with the default configuration and using memtier_benchmark with 10M different keys, 64 bytes of
 payload, and with 100 clients per thread (1 thread 100 clients, 64 threads 6400 clients) using 2 different machines with
 the same hardware to generate the load.
 
-cachegrand is able to scale linearly if enough cpu power is left to the operating system to process the network data.
+cachegrand is able to scale almost linearly if enough cpu power is left to the operating system to process the network
+data.
 
 <p align="center">
   <img alt="GET Operations/s" src="https://raw.githubusercontent.com/danielealbano/cachegrand/main/docs/benchmarks/cachegrand-amd-epyc-7502p-get-ops.png" width="47%">
@@ -84,7 +73,7 @@ Key features:
 Planned Key Features:
 - More modules for additional platforms compatibility, e.g. [Memcache](https://github.com/danielealbano/cachegrand/blob/main/docs/architecture/modules/memcache.md), AWS S3,
   etc., or to add support for monitoring, e.g. [DataDog](https://github.com/danielealbano/cachegrand/blob/main/docs/architecture/modules/datadog.md),
-- etc.;
+  etc.;
 - Ad ad-hoc network stack based on DPDK / Linux XDP (eXpress Data Path) and the FreeBSD network stack;
 - [WebAssembly](https://github.com/danielealbano/cachegrand/blob/main/docs/architecture/webassembly.md) to provide
   AOT-compiled

@@ -20,7 +20,7 @@
 #include "memory_fences.h"
 #include "config.h"
 #include "data_structures/double_linked_list/double_linked_list.h"
-#include "data_structures/small_circular_queue/small_circular_queue.h"
+#include "data_structures/ring_bounded_spsc/ring_bounded_spsc.h"
 #include "data_structures/hashtable/mcmp/hashtable.h"
 #include "data_structures/queue_mpmc/queue_mpmc.h"
 #include "memory_allocator/ffma.h"
@@ -28,7 +28,7 @@
 #include "storage/channel/storage_channel.h"
 #include "storage/db/storage_db.h"
 #include "utils_cpu.h"
-#include "fiber.h"
+#include "fiber/fiber.h"
 #include "worker/worker_stats.h"
 #include "worker/worker_context.h"
 
@@ -163,7 +163,7 @@ public:
             BenchmarkSupport::CollectHashtableStatsAndUpdateState(
                     (benchmark::State&)state, this->_db->hashtable);
 
-            // Free the stoarge
+            // Free the storage
             storage_db_free(this->_db, this->_workers_count);
         }
 

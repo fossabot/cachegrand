@@ -19,7 +19,7 @@
 #include "memory_fences.h"
 #include "config.h"
 #include "data_structures/double_linked_list/double_linked_list.h"
-#include "data_structures/small_circular_queue/small_circular_queue.h"
+#include "data_structures/ring_bounded_spsc/ring_bounded_spsc.h"
 #include "data_structures/queue_mpmc/queue_mpmc.h"
 #include "data_structures/hashtable/mcmp/hashtable.h"
 #include "memory_allocator/ffma.h"
@@ -27,7 +27,7 @@
 #include "storage/channel/storage_channel.h"
 #include "storage/db/storage_db.h"
 #include "utils_cpu.h"
-#include "fiber.h"
+#include "ffiber/iber.h"
 #include "worker/worker_stats.h"
 #include "worker/worker_context.h"
 

@@ -39,12 +39,12 @@
 #include "utils_numa.h"
 #include "log/log.h"
 #include "config.h"
-#include "fiber.h"
-#include "fiber_scheduler.h"
+#include "fiber/fiber.h"
+#include "fiber/fiber_scheduler.h"
 #include "support/io_uring/io_uring_support.h"
 #include "support/io_uring/io_uring_capabilities.h"
 #include "data_structures/hashtable/mcmp/hashtable.h"
-#include "data_structures/small_circular_queue/small_circular_queue.h"
+#include "data_structures/ring_bounded_spsc/ring_bounded_spsc.h"
 #include "data_structures/double_linked_list/double_linked_list.h"
 #include "support/simple_file_io.h"
 #include "module/module.h"
@@ -432,7 +432,7 @@ void* worker_thread_func(
     //       they have to terminate the execution ASAP and therefore any network communication should be halted on the
     //       spot but any pending / in progress I/O operation should be safely completed.
     //       In case the fibers are not terminating, even if it can lead to corruption, them should be terminated within
-    //       a maximum timeout or X seconds and an error message should be reported pointing out what a fiber is doinng
+    //       a maximum timeout or X seconds and an error message should be reported pointing out what a fiber is doing
     //       and where.
     do {
         if (worker_context->config->network->backend == CONFIG_NETWORK_BACKEND_IO_URING ||

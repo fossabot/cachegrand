@@ -48,7 +48,7 @@ jobs:
           fetch-depth: 2
 
       - name: Install required dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake pkg-config git libnuma1 libnuma-dev libcurl4-openssl-dev libcurl4 libyaml-0-2 libyaml-dev libmbedtls-dev valgrind
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake pkg-config git libnuma1 libnuma-dev libcurl4-openssl-dev libcurl4 libyaml-0-2 libyaml-dev libmbedtls-dev libpcre2-8-0 libpcre2-dev libjson-c-dev valgrind
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -71,7 +71,7 @@ jobs:
       - name: Tests - Unit Tests
         working-directory: ${{github.workspace}}/build
         shell: bash
-        run: sudo tests/unit_tests/cachegrand-tests --order lex
+        run: cd tests/unit_tests && sudo ./cachegrand-tests --order lex
 
       - name: Code Coverage - Generation
         uses: danielealbano/lcov-action@v3
@@ -79,10 +79,13 @@ jobs:
           gcov_path: /usr/bin/gcov-9
           remove_patterns: 3rdparty,tests
 
-      - name: Code Coverage - Upload to codecov.io
-        shell: bash
-        working-directory: ${{github.workspace}}
-        run: bash <(curl -s https://codecov.io/bash) -X gcov -Z -f coverage.info
+      - uses: codecov/codecov-action@v3
+        with:
+          files: ${{github.workspace}}/coverage.info
+          flags: unittests # optional
+          name: cachegrand-server
+          fail_ci_if_error: false
+          verbose: false
 
       - name: Tests - Integration Tests - Redis Server
         working-directory: ${{github.workspace}}/build
